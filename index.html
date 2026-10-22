@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Club de Billar · Sistema de atención</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>tailwind.config={theme:{extend:{colors:{ink:'#0b1812',brand:'#3dbb2b',danger:'#c24b4b'}}}}</script>
+<style>
+:root{--ink:#0b1812;--ink2:#14261d;--brand:#3dbb2b;--line:#e6e9e5}
+body{background:#f2f4f1;color:#1a1f1c;font-family:Poppins,system-ui,sans-serif}
+.card{background:#fff;border:1px solid var(--line);border-radius:.75rem;box-shadow:0 1px 2px #0b18120a,0 4px 14px #0b18120a;transition:box-shadow .2s,transform .2s}
+.card:hover{box-shadow:0 2px 4px #0b181212,0 10px 24px #0b181214}
+.card img{transition:transform .5s}.card:hover img{transform:scale(1.05)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;border-radius:.6rem;padding:.6rem 1rem;font-weight:600;font-size:.875rem;transition:.15s}
+.btn-p{background:linear-gradient(180deg,#46c733,#34a524);color:#fff;box-shadow:0 2px 8px #3dbb2b55}.btn-p:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.btn-d{background:var(--ink);color:#fff}.btn-d:hover{background:var(--ink2)}
+.btn-o{border:1px solid #dfe3de;background:#fff}.btn-o:hover{background:#f2f5f2;border-color:var(--brand)}
+.inp{border:1px solid #dfe3de;border-radius:.6rem;padding:.65rem .8rem;width:100%;background:#fff;outline:none;transition:.15s}.inp:focus{border-color:var(--brand);box-shadow:0 0 0 3px #3dbb2b33}
+.ifield{position:relative}.ifield .ico{position:absolute;left:.8rem;top:50%;transform:translateY(-50%);color:#8a8f8c}.ifield .inp{padding-left:2.5rem}
+.nav{position:relative;display:flex;align-items:center;gap:.7rem;text-align:left;white-space:nowrap;padding:.7rem .9rem;border-radius:.6rem;color:#a9b5ae;font-size:.9rem;width:100%;transition:.15s}
+.nav:hover{background:#ffffff0d;color:#fff}
+.nav.on{background:linear-gradient(90deg,#3dbb2b26,#3dbb2b0a);color:#fff}
+.nav.on svg{color:var(--brand)}
+.nav.on:before{content:"";position:absolute;left:0;top:22%;bottom:22%;width:3px;border-radius:3px;background:var(--brand)}
+.nav svg{width:18px;height:18px;flex:none}
+.bal th,.bal td{padding:.3rem .6rem}.mut{color:#7d837f}
+.felt{background:radial-gradient(circle at 20% 10%,#1d7a2a 0,#0f4a1c 55%,#06140d 100%)}
+.chip{display:inline-flex;align-items:center;justify-content:center;border-radius:.6rem;flex:none}
+.pill{display:inline-flex;align-items:center;gap:.35rem;padding:.2rem .6rem;border-radius:999px;font-size:.72rem;font-weight:500}
+.pill i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.fade{animation:fd .35s ease-out}@keyframes fd{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.fade{animation:none}.card img{transition:none}}
+</style></head>
+<body>
+<div id="login" class="min-h-screen flex">
+  <div class="hidden md:block w-1/2 bg-ink felt relative overflow-hidden">
+    <span class="absolute -right-16 -top-16 w-72 h-72 rounded-full border border-white/10"></span>
+    <span class="absolute right-10 top-24 w-24 h-24 rounded-full bg-brand/90 shadow-2xl flex items-center justify-center text-white text-3xl font-bold">8</span>
+    <span class="absolute left-16 top-1/3 w-14 h-14 rounded-full bg-white/90 shadow-xl"></span>
+    <span class="absolute left-40 top-[45%] w-10 h-10 rounded-full bg-danger shadow-xl"></span>
+    <img id="lg" data-n="login" data-k="0" class="absolute inset-0 w-full h-full object-cover" alt="" referrerpolicy="no-referrer" onerror="imgFb(this)">
+    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-transparent"></div>
+    <div class="absolute bottom-10 left-10 text-white"><p class="text-3xl font-semibold">Club de Billar</p><p class="text-brand mt-1">Sistema de atención y control de mesas</p>
+      <div class="flex gap-5 mt-5 text-sm text-white/70"><span class="flex items-center gap-2"><i data-i="clock"></i>Tiempo real</span><span class="flex items-center gap-2"><i data-i="receipt"></i>Cobros</span><span class="flex items-center gap-2"><i data-i="chart"></i>Balance</span></div></div></div>
+  <div class="flex-1 flex items-center justify-center p-6"><div class="w-full max-w-sm">
+    <div class="w-14 h-14 rounded-xl bg-ink flex items-center justify-center mb-6 shadow-lg"><span class="w-6 h-6 rounded-full bg-brand"></span></div>
+    <h1 class="text-2xl font-semibold">Bienvenido</h1><p class="mut text-sm mb-6">Ingresa para administrar tu local.</p>
+    <label class="text-sm font-medium">Usuario</label><div class="ifield mt-1 mb-4"><i class="ico" data-i="user"></i><input id="u" class="inp" value="admin"></div>
+    <label class="text-sm font-medium">Contraseña</label><div class="ifield mt-1 mb-2"><i class="ico" data-i="lock"></i><input id="p" type="password" class="inp" value="1234"></div>
+    <p id="err" class="text-danger text-sm h-5"></p>
+    <button id="go" class="btn btn-p w-full mt-2"><i data-i="logout"></i>Iniciar sesión</button>
+    <p class="text-xs mut mt-4 text-center">Demo · usuario: admin · contraseña: 1234</p></div></div></div>
+
+<div id="app" class="hidden min-h-screen flex-col md:flex-row">
+  <aside class="bg-ink md:w-64 md:min-h-screen p-4 flex md:flex-col gap-1 overflow-x-auto md:fixed md:inset-y-0 z-10">
+    <div class="hidden md:flex items-center gap-3 px-1 pt-2 pb-5"><span class="w-10 h-10 rounded-xl bg-brand flex items-center justify-center shadow-lg shadow-brand/30"><span class="w-4 h-4 rounded-full bg-ink"></span></span><span class="text-white font-bold tracking-wide">BILLAR CLUB</span></div>
+    <div class="hidden md:flex items-center gap-3 border border-white/15 bg-white/5 rounded-xl p-3 mb-1"><span class="chip w-9 h-9 bg-brand/15 text-brand"><i data-i="pin"></i></span><div><p class="text-[10px] text-white/50">Sucursal</p><p class="text-white text-sm font-medium">Av. Germán Bush Nº30</p></div></div>
+    <p class="hidden md:block text-center text-xs text-brand mb-3 mt-1">Cambiar sucursal</p>
+    <div id="nav" class="flex md:flex-col gap-1 md:flex-1"></div>
+    <button id="out" class="nav"><i data-i="logout"></i>Cerrar sesión</button>
+  </aside>
+  <main class="flex-1 md:ml-64 min-w-0 p-4 md:p-8"><div id="view"></div></main>
+</div>
+<div id="modal" class="hidden fixed inset-0 bg-ink/60 backdrop-blur-sm z-50 items-center justify-center p-4"></div>
+<div id="toast" class="hidden fixed bottom-6 right-6 bg-ink text-white pl-3 pr-4 py-3 rounded-xl shadow-xl z-50 text-sm items-center gap-2 border-l-4 border-brand"></div>
+
+<script>
+const $$=s=>document.querySelector(s),$=s=>$$(s);
+const f=n=>n.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const FB='data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150"><defs><radialGradient id="g" cx=".3" cy=".2" r="1"><stop offset="0" stop-color="#1d7a2a"/><stop offset="1" stop-color="#06140d"/></radialGradient></defs><rect width="200" height="150" fill="url(#g)"/><circle cx="100" cy="75" r="24" fill="#3dbb2b"/><circle cx="100" cy="75" r="11" fill="#fff"/><circle cx="92" cy="66" r="5" fill="#ffffff66"/></svg>');
+// Imágenes de internet. Cada una prueba su lista de URLs en orden y, si todas fallan, muestra una ilustración.
+const cm=f=>`https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(f)}?width=640`;
+const lf=(k,n)=>`https://loremflickr.com/640/440/${k}/all?lock=${n}`;
+const SRC={
+cerveza:[cm('Piwo z Grodziska 2.jpg'),lf('beer',3)],
+cocacola:[cm('Glass of Coca-Cola.jpg'),lf('cola,soda',2)],
+agua:[cm('Bottled water.jpg'),lf('bottle,water',5)],
+papas:[cm('Potato-Chips.jpg'),lf('potato,chips',4)],
+hamburguesa:[cm('Hamburger (black bg).jpg'),lf('hamburger',6)],
+mesa1:[cm('Pool, Zlín (1).jpg'),lf('billiards',11)],
+mesa2:[cm('Billiards table 4.jpg'),lf('billiards',23)],
+mesa3:[cm('Snookertable.jpg'),lf('snooker',8)],
+promo:[cm('Two Men playing pool.JPG'),lf('billiards',31)],
+login:[cm('Chicago poolhall.jpg'),lf('billiards,bar',17)]};
+function imgFb(e){const l=SRC[e.dataset.n],k=+e.dataset.k+1;e.dataset.k=k;if(k<l.length)e.src=l[k];else{e.onerror=null;if(e.dataset.n==='login')e.style.display='none';else e.src=FB}}
+const im=(n,c)=>`<img src="${SRC[n][0]}" data-n="${n}" data-k="0" class="${c}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="imgFb(this)">`;
+$$('#lg').src=SRC.login[0];
+
+const IC={inicio:'M3 11l9-8 9 8M5 10v10h14V10',asignar:'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',balance:'M4 20V10M10 20V4M16 20v-8M22 20H2',usuarios:'M16 8a4 4 0 1 0-8 0 4 4 0 0 0 8 0M4 21c0-4 4-6 8-6s8 2 8 6',productos:'M4 7l8-4 8 4v10l-8 4-8-4zM4 7l8 4 8-4M12 11v10',mesas:'M3 6h18v12H3zM7 10h.01M17 14h.01M12 10v4',
+user:'M16 8a4 4 0 1 0-8 0 4 4 0 0 0 8 0M4 21c0-4 4-6 8-6s8 2 8 6',clock:'M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0',receipt:'M6 3h12v18l-3-2-3 2-3-2-3 2zM9 8h6M9 12h6',chart:'M4 20V10M10 20V4M16 20v-8M22 20H2',lock:'M5 11h14v10H5zM8 11V7a4 4 0 1 1 8 0v4',logout:'M9 21H5V3h4M16 17l5-5-5-5M21 12H9',pin:'M12 21s7-6 7-12a7 7 0 1 0-14 0c0 6 7 12 7 12zM12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
+bell:'M6 17V11a6 6 0 1 1 12 0v6l2 2H4zM10 21h4',search:'M21 21l-4-4M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z',wallet:'M3 7h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 7l12-4v4M17 14h.01',xc:'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM15 9l-6 6M9 9l6 6',pct:'M19 5L5 19M7 7h.01M17 17h.01',plus:'M12 5v14M5 12h14',minus:'M5 12h14',play:'M7 4l13 8-13 8z',check:'M5 13l4 4L19 7',star:'M12 3l2.8 5.8 6.2.9-4.5 4.4 1.1 6.2-5.6-3 -5.6 3 1.1-6.2L3 9.7l6.2-.9z',zap:'M13 2L4 14h7l-1 8 9-12h-7z',trophy:'M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v2a3 3 0 0 0 3 3M17 6h3v2a3 3 0 0 1-3 3',eye:'M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z',dollar:'M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6',cup:'M5 8h11v11H5zM16 10h3v5h-3zM5 4h11',tag:'M3 12V3h9l9 9-9 9z',up:'M3 17l6-6 4 4 8-8M15 7h6v6',users:'M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM21 20v-2a4 4 0 0 0-3-3.9M16 2.1a4 4 0 0 1 0 7.8',shield:'M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z',box:'M4 7l8-4 8 4v10l-8 4-8-4zM4 7l8 4 8-4M12 11v10'};
+const ic=(n,c='w-4 h-4')=>`<svg class="${c}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${IC[n]}"/></svg>`;
+document.querySelectorAll('[data-i]').forEach(e=>e.innerHTML=ic(e.dataset.i,'w-[18px] h-[18px]'));
+
+const productos=[
+{id:1,n:'Cerveza',p:15,s:120,img:'cerveza',code:'128964',r:4.8,sold:312,tr:1.8},
+{id:2,n:'Coca-Cola',p:8,s:80,img:'cocacola',code:'129221',r:4.6,sold:184,tr:0.9},
+{id:3,n:'Agua mineral',p:6,s:60,img:'agua',code:'130415',r:4.2,sold:96,tr:-2.5},
+{id:4,n:'Papas fritas',p:10,s:45,img:'papas',code:'131870',r:4.5,sold:141,tr:3.1},
+{id:5,n:'Hamburguesa',p:25,s:30,img:'hamburguesa',code:'132008',r:3.9,sold:77,tr:-1.2}];
+const mesas=[
+{id:1,n:'Mesa 1 · Clásica',t:'Pool 8 bolas',p:30,img:'mesa1',st:'libre',start:null,items:{}},
+{id:2,n:'Mesa 2 · Premium',t:'Carambola',p:45,img:'mesa2',st:'libre',start:null,items:{}},
+{id:3,n:'Mesa 3 · VIP',t:'Snooker',p:60,img:'mesa3',st:'libre',start:null,items:{}}];
+const usuarios=[['Administrador','admin','Administrador','Activo'],['María Rojas','mrojas','Cajera','Activo'],['Carlos Suárez','csuarez','Mesero','Activo'],['Lucía Vargas','lvargas','Mesero','Activo'],['Jorge Melgar','jmelgar','Supervisor','Inactivo']];
+const cobros=[];let sel=null,tick=null,tab=0;
+
+const menu=[['inicio','Inicio'],['asignar','Asignar mesa'],['balance','Balance general'],'Gestión',['usuarios','Usuarios'],['productos','Productos'],['mesas','Mesas de billar']];
+$('#go').onclick=()=>{if($('#u').value==='admin'&&$('#p').value==='1234'){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');$('#app').classList.add('flex');go('inicio')}else $('#err').textContent='Usuario o contraseña incorrectos'};
+$('#p').onkeydown=e=>{if(e.key==='Enter')$('#go').click()};
+$('#out').onclick=()=>location.reload();
+function go(v){$('#nav').innerHTML=menu.map(m=>typeof m==='string'?`<p class="hidden md:block text-xs text-white/40 px-3 pt-5 pb-1">${m}</p>`:`<button class="nav ${m[0]===v?'on':''}" onclick="go('${m[0]}')">${ic(m[0],'w-[18px] h-[18px]')}${m[1]}</button>`).join('');
+clearInterval(tick);$('#view').innerHTML=topbar()+`<div class="fade">`+({inicio,usuarios:usuariosV,productos:productosV,mesas:mesasV,asignar,balance})[v]()+`</div>`;if(v==='asignar')tick=setInterval(live,1000);window.scrollTo(0,0)}
+function topbar(){const o=mesas.filter(m=>m.st==='ocupada').length;return `<div class="flex flex-wrap items-start justify-between gap-4 mb-6"><div><h1 class="text-2xl font-medium">Bienvenido, <b class="font-semibold">Administrador</b> 😉</h1><p class="mut text-sm flex items-center gap-2 mt-1"><span class="pill ${o?'bg-amber-50 text-amber-700':'bg-[#e6f6e3] text-[#2a8a1c]'}"><i></i>${o} ocupadas</span>${new Date().toLocaleDateString('es-BO',{weekday:'long',day:'numeric',month:'long'})}</p></div>
+<div class="flex gap-2"><span class="relative card w-11 h-11 flex items-center justify-center mut">${ic('bell','w-5 h-5')}<i class="absolute top-2 right-2.5 w-2 h-2 rounded-full bg-brand ring-2 ring-white"></i></span>
+<div class="card flex items-center gap-2 px-3 w-56 mut text-sm">${ic('search')}Buscar...</div></div></div>`}
+
+// ---------- GRÁFICOS ----------
+function smooth(p){let d=`M${p[0][0]},${p[0][1]}`;for(let i=0;i<p.length-1;i++){const a=p[i-1]||p[i],b=p[i],c=p[i+1],e=p[i+2]||c;d+=`C${b[0]+(c[0]-a[0])/6},${b[1]+(c[1]-a[1])/6} ${c[0]-(e[0]-b[0])/6},${c[1]-(e[1]-b[1])/6} ${c[0]},${c[1]}`}return d}
+const series=s=>Array.from({length:15},(_,i)=>Math.round(130+70*Math.sin(i/2.2+s)+28*Math.cos(i/1.2+s*2)));
+const TABS=['Todas','Mesa 1','Mesa 2','Mesa 3'];
+function line(i){const a=series(i+.4),b=series(i+2.1),X=k=>40+k*(650/14),Y=v=>200-v/280*190,P=d=>d.map((v,k)=>[X(k),Y(v)]);
+const grid=[0,70,140,210,280].map(v=>`<line x1="36" x2="700" y1="${Y(v)}" y2="${Y(v)}" stroke="#eceeec" stroke-dasharray="4"/><text x="0" y="${Y(v)+4}" font-size="11" fill="#8a8f8c">${v}</text>`).join('');
+const xl=a.map((_,k)=>`<text x="${X(k)}" y="228" font-size="11" fill="#8a8f8c" text-anchor="middle">${String(k*2+2).padStart(2,'0')}</text>`).join('');
+const pa=smooth(P(a));
+return `<svg viewBox="0 0 710 236" class="w-full"><defs><linearGradient id="ar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3dbb2b" stop-opacity=".25"/><stop offset="1" stop-color="#3dbb2b" stop-opacity="0"/></linearGradient></defs>${grid}${xl}<path d="${pa}L${X(14)},200L${X(0)},200Z" fill="url(#ar)"/><path d="${smooth(P(b))}" fill="none" stroke="#c8ccc9" stroke-width="1.8" stroke-dasharray="5 4"/><path d="${pa}" fill="none" stroke="#3dbb2b" stroke-width="2.6" stroke-linecap="round"/><line x1="${X(9)}" x2="${X(9)}" y1="10" y2="200" stroke="#e1e3e0"/><circle cx="${X(9)}" cy="${Y(a[9])}" r="5" fill="#fff" stroke="#3dbb2b" stroke-width="2.4"/><text x="${X(9)}" y="${Y(a[9])-12}" font-size="12" font-weight="600" fill="#3dbb2b" text-anchor="middle">${a[9]}</text></svg>`}
+function salesCard(){return `<div class="flex items-center justify-between p-4 border-b border-[#f0f1ef]"><div class="flex items-center gap-3 font-medium"><span class="chip w-9 h-9 bg-brand/10 text-brand">${ic('chart','w-[18px] h-[18px]')}</span>Ingresos por mesa</div><span class="card px-3 py-1.5 text-sm mut flex items-center gap-2">${ic('clock','w-3.5 h-3.5')}Este mes</span></div>
+<div class="p-4"><div class="flex gap-2 text-sm mb-3">${TABS.map((t,i)=>`<button onclick="setTab(${i})" class="px-3 py-1 rounded-full transition ${i===tab?'bg-brand text-white font-medium':'mut hover:bg-[#f1f3f1]'}">${t}</button>`).join('')}</div>${line(tab)}<div class="flex gap-5 text-xs mut mt-2"><span><i class="inline-block w-2 h-2 rounded-full bg-[#c8ccc9] mr-1"></i>Mes anterior</span><span><i class="inline-block w-2 h-2 rounded-full bg-brand mr-1"></i>Este mes</span></div></div>`}
+function setTab(i){tab=i;$('#sales').innerHTML=salesCard()}
+function donut(p,c){const L=2*Math.PI*18;return `<svg viewBox="0 0 44 44" class="w-14 h-14 flex-none"><circle cx="22" cy="22" r="18" fill="none" stroke="#eef0ee" stroke-width="5"/><circle cx="22" cy="22" r="18" fill="none" stroke="${c}" stroke-width="5" stroke-linecap="round" stroke-dasharray="${L*p/100} ${L}" transform="rotate(-90 22 22)"/><text x="22" y="25" font-size="9" font-weight="600" text-anchor="middle" fill="#1a1f1c">${p}%</text></svg>`}
+function bars(vals,labels){const mx=Math.max(...vals);return `<div class="flex items-end gap-2 h-44">${vals.map((v,i)=>`<div class="flex-1 flex flex-col items-center justify-end h-full"><span class="text-[10px] mut mb-1">${v}</span><div class="w-full rounded-lg ${v===mx?'bg-gradient-to-t from-[#34a524] to-[#6bdc5a]':'bg-[#d4ecd0]'}" style="height:${v/mx*78}%"></div><span class="text-[11px] mut mt-1">${labels[i]}</span></div>`).join('')}</div>`}
+const tr=v=>`<span class="${v>=0?'text-brand':'text-danger'} text-xs font-medium">${v>=0?'▲':'▼'} ${v>=0?'+':''}${String(v).replace('.',',')}%</span>`;
+const badge=m=>`<span class="pill ${m.st==='libre'?'bg-[#e6f6e3] text-[#2a8a1c]':'bg-amber-50 text-amber-700'}"><i></i>${m.st==='libre'?'Disponible':'Ocupada'}</span>`;
+const priceTag=m=>`<span class="absolute left-3 bottom-3 pill bg-ink/80 text-white backdrop-blur">${ic('clock','w-3 h-3')}Bs ${f(m.p)}/h</span>`;
+
+// ---------- INICIO ----------
+function inicio(){const k=[['Ingresos','Bs '+f(38450),12.4,78,'#3dbb2b','wallet'],['Mesas ocupadas','2 de 3',-8,66,'#3dbb2b','mesas'],['Pedidos','486',1.3,61,'#3dbb2b','receipt'],['Cancelados','12',-0.7,25,'#c24b4b','xc'],['Propinas','8 %',0.3,40,'#3dbb2b','pct']];
+const hrs=['14h','15h','16h','17h','18h','19h','20h','21h','22h','23h','00h'];
+return `<h2 class="font-medium mb-3">Rendimiento de hoy</h2><div class="grid grid-cols-2 xl:grid-cols-5 gap-3 mb-6">${k.map(x=>`<div class="card p-4"><div class="flex items-center justify-between mb-3"><span class="chip w-9 h-9 ${x[4]==='#c24b4b'?'bg-danger/10 text-danger':'bg-brand/10 text-brand'}">${ic(x[5],'w-[18px] h-[18px]')}</span>${tr(x[2])}</div><div class="flex items-center justify-between gap-2"><div><p class="text-xs mut">${x[0]}</p><p class="font-semibold text-lg">${x[1]}</p></div>${donut(x[3],x[4])}</div></div>`).join('')}</div>
+<div class="grid xl:grid-cols-3 gap-4 mb-4"><div id="sales" class="card xl:col-span-2">${salesCard()}</div>
+<div class="rounded-xl overflow-hidden relative text-white felt min-h-[320px] flex flex-col shadow-lg">${im('promo','absolute inset-0 w-full h-full object-cover opacity-40')}
+<span class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full border border-white/10"></span><span class="absolute right-6 bottom-6 w-12 h-12 rounded-full bg-brand/80"></span>
+<div class="relative p-6 flex-1 flex flex-col"><div class="flex items-center gap-3 mb-5"><span class="w-10 h-10 rounded-xl bg-white flex items-center justify-center"><span class="w-4 h-4 rounded-full bg-brand"></span></span><div><p class="font-semibold leading-none">BILLAR CLUB</p><p class="text-xs text-white/70">Resumen del mes</p></div></div>
+<p class="text-xl font-semibold leading-snug mb-4">Tu mejor hora es las 20:00 con 38 clientes</p>
+<div class="border-t border-white/15 pt-4 space-y-2.5 text-sm flex-1">${[['cup','Producto estrella: Cerveza'],['trophy','Mesa top: Mesa 3 · VIP'],['users','486 clientes atendidos'],['clock','812 horas jugadas']].map(t=>`<p class="flex items-center gap-3"><span class="chip w-7 h-7 bg-brand/25 text-brand">${ic(t[0],'w-3.5 h-3.5')}</span>${t[1]}</p>`).join('')}</div>
+<button onclick="go('balance')" class="btn btn-p w-full mt-4">${ic('chart')}Ver balance</button></div></div></div>
+<div class="grid xl:grid-cols-3 gap-4 mb-4"><div class="card p-5 xl:col-span-2"><div class="flex justify-between items-center mb-4"><h3 class="font-medium flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('users')}</span>Clientes por hora</h3><span class="pill bg-[#e6f6e3] text-[#2a8a1c]">${ic('zap','w-3 h-3')}Pico: 20h</span></div>${bars([4,6,9,14,22,31,38,35,24,12,5],hrs)}</div>
+<div class="card p-5"><h3 class="font-medium mb-4 flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('dollar')}</span>Ingreso por tipo</h3>${[['Alquiler de mesas',24300,63],['Consumo de productos',14150,37]].map(r=>`<div class="mb-4"><div class="flex justify-between text-sm mb-1"><span>${r[0]}</span><b>Bs ${f(r[1])}</b></div><div class="h-2 bg-[#eef0ee] rounded-full"><div class="h-2 rounded-full bg-gradient-to-r from-[#34a524] to-[#6bdc5a]" style="width:${r[2]}%"></div></div></div>`).join('')}
+${[['Horas jugadas','812 h','clock'],['Ticket promedio','Bs 79,10','receipt'],['Cuenta más alta','Bs 412,00','up']].map(r=>`<div class="flex justify-between items-center py-2 border-t border-[#f0f1ef] text-sm"><span class="mut flex items-center gap-2">${ic(r[2],'w-3.5 h-3.5')}${r[0]}</span><b>${r[1]}</b></div>`).join('')}</div></div>
+<div class="card overflow-x-auto"><div class="p-4 font-medium border-b border-[#f0f1ef] flex items-center gap-3"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('productos')}</span>Productos más vendidos</div><table class="w-full text-sm min-w-[640px]"><thead class="mut text-left bg-[#fafafa]"><tr>${['Producto','Código','Calificación','Stock','Vendidos','Tendencia',''].map(h=>`<th class="p-3 font-normal">${h}</th>`).join('')}</tr></thead><tbody>${[...productos].sort((a,b)=>b.sold-a.sold).map(p=>`<tr class="border-t border-[#f0f1ef] hover:bg-[#f8fbf7]"><td class="p-3"><div class="flex items-center gap-3">${im(p.img,'w-10 h-10 rounded-lg object-cover')}<div><p class="font-medium">${p.n}</p><p class="text-[11px] mut">Bs ${f(p.p)}</p></div></div></td><td class="p-3 mut">${p.code}</td><td class="p-3"><span class="inline-flex items-center gap-1"><span class="text-amber-400">${ic('star','w-3.5 h-3.5').replace('fill="none"','fill="currentColor"')}</span>${String(p.r).replace('.',',')}<span class="mut">/5</span></span></td><td class="p-3">${p.s}</td><td class="p-3 font-medium">${p.sold}</td><td class="p-3">${tr(p.tr)}</td><td class="p-3 text-brand text-right"><span class="inline-flex items-center gap-1">${ic('eye','w-3.5 h-3.5')}Ver</span></td></tr>`).join('')}</tbody></table></div>`}
+
+// ---------- LISTADOS ----------
+const ttl=(t,s,i)=>`<div class="mb-5 flex items-center gap-3"><span class="chip w-11 h-11 bg-ink text-brand shadow-md">${ic(i,'w-5 h-5')}</span><div><h2 class="font-semibold text-lg leading-tight">${t}</h2><p class="mut text-sm">${s}</p></div></div>`;
+const roleIc={Administrador:'shield',Cajera:'wallet',Mesero:'cup',Supervisor:'eye'};
+function usuariosV(){return ttl('Usuarios','Personal con acceso al sistema','usuarios')+`<div class="card overflow-x-auto"><table class="w-full text-sm"><thead class="mut text-left bg-[#fafafa]"><tr>${['Nombre','Usuario','Rol','Estado'].map(h=>`<th class="p-3 font-normal">${h}</th>`).join('')}</tr></thead><tbody>${usuarios.map(u=>`<tr class="border-t border-[#f0f1ef] hover:bg-[#f8fbf7]"><td class="p-3"><div class="flex items-center gap-3"><span class="chip w-9 h-9 bg-ink text-brand font-semibold text-xs">${u[0].split(' ').map(x=>x[0]).join('').slice(0,2)}</span><b class="font-medium">${u[0]}</b></div></td><td class="p-3 mut">${u[1]}</td><td class="p-3"><span class="inline-flex items-center gap-2"><span class="text-brand">${ic(roleIc[u[2]])}</span>${u[2]}</span></td><td class="p-3"><span class="pill ${u[3]==='Activo'?'bg-[#e6f6e3] text-[#2a8a1c]':'bg-[#eef0ee] mut'}"><i></i>${u[3]}</span></td></tr>`).join('')}</tbody></table></div>`}
+function productosV(){return ttl('Productos','Catálogo de bebidas y snacks','productos')+`<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">${productos.map(p=>`<div class="card overflow-hidden"><div class="relative overflow-hidden">${im(p.img,'w-full h-44 object-cover')}<span class="absolute right-3 top-3 pill bg-white/90 text-ink font-semibold">${ic('tag','w-3 h-3')}Bs ${f(p.p)}</span></div><div class="p-4"><p class="font-semibold">${p.n}</p><div class="flex justify-between text-xs mut mt-1"><span class="flex items-center gap-1">${ic('box','w-3.5 h-3.5')}Stock: ${p.s} u.</span><span>Cód. ${p.code}</span></div><div class="h-1.5 bg-[#eef0ee] rounded-full mt-3"><div class="h-1.5 rounded-full bg-brand" style="width:${Math.min(100,p.s/120*100)}%"></div></div></div></div>`).join('')}</div>`}
+function mesasV(){return ttl('Mesas de billar','Mesas registradas en el local','mesas')+`<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">${mesas.map(m=>`<div class="card overflow-hidden"><div class="relative overflow-hidden">${im(m.img,'w-full h-48 object-cover')}${priceTag(m)}</div><div class="p-4"><div class="flex justify-between items-center"><p class="font-semibold">${m.n}</p>${badge(m)}</div><p class="text-sm mut mt-1 flex items-center gap-2">${ic('mesas','w-3.5 h-3.5')}${m.t}</p></div></div>`).join('')}</div>`}
+
+// ---------- ASIGNAR MESA ----------
+const hhmm=d=>d.toTimeString().slice(0,5);
+const cost=m=>Math.max(0,(Date.now()-m.start)/3600000)*m.price;
+const itemsTotal=m=>Object.entries(m.items).reduce((s,[id,q])=>s+q*productos.find(p=>p.id==id).p,0);
+const dur=m=>{const s=Math.max(0,Math.floor((Date.now()-m.start)/1000));return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,'0')).join(':')};
+function asignar(){return ttl('Asignar mesa','Elige una mesa disponible, inicia el tiempo y registra los consumos','asignar')+
+`<div class="grid sm:grid-cols-3 gap-4 mb-6">${mesas.map(m=>`<div class="card overflow-hidden ${sel===m.id?'ring-2 ring-brand':''}"><div class="relative overflow-hidden">${im(m.img,'w-full h-32 object-cover')}${priceTag(m)}</div><div class="p-4"><div class="flex justify-between items-center"><p class="font-semibold text-sm">${m.n}</p>${badge(m)}</div><button class="btn ${m.st==='libre'?'btn-p':'btn-d'} w-full mt-3" onclick="pick(${m.id})">${m.st==='libre'?ic('play')+'Asignar':ic('receipt')+'Ver cuenta'}</button></div></div>`).join('')}</div>
+<div id="panel">${panel()}</div>
+<div class="card p-5 mt-6"><h3 class="font-medium mb-3 flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('wallet')}</span>Cobros de la sesión</h3>${cobros.length?cobros.map(c=>`<div class="flex justify-between items-center text-sm py-2 border-b border-[#f0f1ef] last:border-0"><span class="flex items-center gap-2"><span class="text-brand">${ic('check')}</span>${c.mesa} · ${c.ini} – ${c.fin}</span><b>Bs ${f(c.total)}</b></div>`).join(''):'<p class="text-sm mut">Aún no hay cobros registrados. Finaliza una mesa para verlos aquí.</p>'}</div>`}
+function panel(){const m=mesas.find(x=>x.id===sel);if(!m)return `<div class="card p-8 text-center mut text-sm"><span class="chip w-12 h-12 bg-[#f1f3f1] mx-auto mb-3">${ic('mesas','w-6 h-6')}</span><p>Selecciona una mesa para continuar.</p></div>`;
+if(m.st==='libre')return `<div class="card p-5 max-w-xl"><h3 class="font-medium mb-4 flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('play')}</span>Iniciar uso · ${m.n}</h3><div class="grid grid-cols-2 gap-4"><div><label class="text-sm font-medium">Hora de inicio</label><input id="hi" type="time" class="inp mt-1" value="${hhmm(new Date())}"></div><div><label class="text-sm font-medium">Precio por hora (Bs)</label><input id="ph" type="number" min="0" class="inp mt-1" value="${m.p}"></div></div><p class="text-xs mut mt-3">Tip: pon una hora anterior para simular tiempo ya transcurrido.</p><button class="btn btn-p mt-4" onclick="start(${m.id})">${ic('play')}Iniciar tiempo</button></div>`;
+return `<div class="grid lg:grid-cols-5 gap-4"><div class="card p-5 lg:col-span-3"><div class="flex justify-between items-center mb-4"><h3 class="font-medium flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('cup')}</span>Agregar consumo · ${m.n}</h3><span class="text-xs mut">Toca un producto para sumarlo</span></div><div class="grid grid-cols-2 sm:grid-cols-3 gap-3">${productos.map(p=>`<button onclick="add(${m.id},${p.id},1)" class="text-left card overflow-hidden hover:border-brand relative"><span class="absolute right-2 top-2 z-10 chip w-6 h-6 bg-brand text-white shadow">${ic('plus','w-3.5 h-3.5')}</span>${im(p.img,'w-full h-24 object-cover')}<div class="p-2"><p class="text-sm font-medium">${p.n}</p><p class="text-xs text-brand font-medium">Bs ${f(p.p)}</p></div></button>`).join('')}</div></div>
+<div class="card p-5 lg:col-span-2"><h3 class="font-medium mb-3 flex items-center gap-2"><span class="chip w-8 h-8 bg-brand/10 text-brand">${ic('receipt')}</span>Cuenta de la mesa</h3><div class="rounded-xl felt text-white p-4 mb-4 relative overflow-hidden"><span class="absolute -right-6 -top-6 w-24 h-24 rounded-full border border-white/10"></span><p class="text-xs text-brand flex items-center gap-1.5">${ic('clock','w-3.5 h-3.5')}Tiempo transcurrido · inicio ${hhmm(new Date(m.start))}</p><p id="t-dur" class="text-3xl font-semibold tabular-nums mt-1">${dur(m)}</p></div>
+<div class="flex justify-between text-sm py-1"><span>Tiempo (Bs ${f(m.price)}/h)</span><b id="t-cost">Bs ${f(cost(m))}</b></div>
+${Object.entries(m.items).map(([id,q])=>{const p=productos.find(x=>x.id==id);return `<div class="flex justify-between items-center text-sm py-1"><span>${p.n}</span><span class="flex items-center gap-2"><button class="btn btn-o !p-0 w-6 h-6" onclick="add(${m.id},${id},-1)">${ic('minus','w-3 h-3')}</button>${q}<button class="btn btn-o !p-0 w-6 h-6" onclick="add(${m.id},${id},1)">${ic('plus','w-3 h-3')}</button><b class="w-20 text-right">Bs ${f(q*p.p)}</b></span></div>`}).join('')||'<p class="text-xs mut py-1">Sin consumos registrados.</p>'}
+<div class="flex justify-between border-t border-[#e8eae7] mt-3 pt-3 text-lg font-semibold"><span>Total</span><span id="t-total" class="text-brand">Bs ${f(cost(m)+itemsTotal(m))}</span></div><button class="btn btn-p w-full mt-4" onclick="finish(${m.id})">${ic('check')}Finalizar y cobrar</button></div></div>`}
+function pick(id){sel=id;$('#view').innerHTML=topbar()+asignar()}
+function start(id){const m=mesas.find(x=>x.id===id);let [h,mi]=$('#hi').value.split(':').map(Number);const d=new Date();d.setHours(h,mi,0,0);if(d>new Date())d.setTime(Date.now());m.start=d.getTime();m.price=+$('#ph').value||m.p;m.st='ocupada';m.items={};pick(id);toast(m.n+' asignada')}
+function add(mid,pid,n){const m=mesas.find(x=>x.id===mid);m.items[pid]=(m.items[pid]||0)+n;if(m.items[pid]<=0)delete m.items[pid];$('#view').innerHTML=topbar()+asignar()}
+function live(){const m=mesas.find(x=>x.id===sel);if(!m||m.st!=='ocupada'||!$('#t-dur'))return;$('#t-dur').textContent=dur(m);$('#t-cost').textContent='Bs '+f(cost(m));$('#t-total').textContent='Bs '+f(cost(m)+itemsTotal(m))}
+function finish(id){const m=mesas.find(x=>x.id===id),c=cost(m),tot=c+itemsTotal(m),o=$('#modal');o.classList.remove('hidden');o.classList.add('flex');
+o.innerHTML=`<div class="card p-6 w-full max-w-md fade"><div class="flex items-center gap-3 mb-1"><span class="chip w-10 h-10 bg-brand/10 text-brand">${ic('receipt','w-5 h-5')}</span><h3 class="text-lg font-semibold">Detalle de pedido</h3></div><p class="text-sm mut mb-4">${m.n} · ${hhmm(new Date(m.start))} a ${hhmm(new Date())} (${dur(m)})</p>
+<div class="flex justify-between text-sm py-1"><span>Alquiler de mesa</span><span>Bs ${f(c)}</span></div>
+${Object.entries(m.items).map(([pid,q])=>{const p=productos.find(x=>x.id==pid);return `<div class="flex justify-between text-sm py-1"><span>${q} × ${p.n}</span><span>Bs ${f(q*p.p)}</span></div>`}).join('')}
+<div class="flex justify-between border-t border-[#e8eae7] mt-3 pt-3 text-lg font-semibold"><span>Total a pagar</span><span class="text-brand">Bs ${f(tot)}</span></div>
+<div class="flex gap-2 mt-5"><button class="btn btn-o flex-1" onclick="closeM()">Volver</button><button class="btn btn-p flex-1" onclick="pay(${id},${tot})">${ic('check')}Confirmar pago</button></div></div>`}
+function closeM(){$('#modal').classList.add('hidden');$('#modal').classList.remove('flex')}
+function pay(id,tot){const m=mesas.find(x=>x.id===id);cobros.unshift({mesa:m.n,ini:hhmm(new Date(m.start)),fin:hhmm(new Date()),total:tot});m.st='libre';m.start=null;m.items={};closeM();pick(id);toast('Pago registrado · mesa disponible')}
+function toast(t){const e=$('#toast');e.innerHTML=`<span class="text-brand">${ic('check','w-4 h-4')}</span>${t}`;e.classList.remove('hidden');e.classList.add('flex');setTimeout(()=>{e.classList.add('hidden');e.classList.remove('flex')},2500)}
+
+// ---------- BALANCE ----------
+function balance(){
+const dis=[['CAJA EFECTIVO M/N',3250],['BANCO M/N',8400]],exi=[['CUENTAS POR COBRAR',950]],rea=[['INVENTARIO DE BEBIDAS',2860],['INVENTARIO DE SNACKS',1140]],ppe=[['MESAS DE BILLAR',64500],['TACOS Y ACCESORIOS',3850],['EQUIPOS DE REFRIGERACIÓN',18200],['EQUIPOS DE SEGURIDAD',1600],['MUEBLES Y ENSERES',9750],['UTENSILIOS',2480]],otr=[['INSTALACIONES',5200]];
+const S=a=>a.reduce((s,x)=>s+x[1],0);const D=S(dis),E=S(exi),R=S(rea),P=S(ppe),O=S(otr);const TA=D+E+R+P+O,pc=2300,pnc=12000,pat=TA-pc-pnc;
+const sec=(t,v)=>`<tr class="font-semibold border-b border-ink"><td class="pt-2">${t}</td><td></td><td class="text-right pt-2">${f(v)}</td></tr>`;
+const row=a=>a.map(x=>`<tr class="hover:bg-[#f4faf3]"><td class="pl-4">${x[0]}</td><td class="text-right">${f(x[1])}</td><td></td></tr>`).join('');
+const h=(t,i)=>`<div class="bg-ink text-white font-semibold px-3 py-2 flex items-center gap-2"><span class="text-brand">${ic(i)}</span>${t}</div>`;
+const tot=(t,v)=>`<div class="bg-brand text-white font-semibold px-3 py-2 flex justify-between"><span>${t}</span><span>${f(v)}</span></div>`;
+return ttl('Balance general','Estado de situación patrimonial · datos ficticios','balance')+`<div class="card p-6 md:p-8 overflow-x-auto"><div class="min-w-[680px]">
+<div class="text-xs mb-4"><p><b>NIT:</b> 1728769018</p><p><b>AV. GERMAN BUSH Nº30</b></p></div>
+<div class="text-center mb-6"><h2 class="text-xl font-bold tracking-wide">BALANCE GENERAL</h2><p class="text-xs font-semibold">AL 22 DE OCTUBRE DEL 2026</p><p class="text-xs">(EXPRESADO EN BOLIVIANOS)</p></div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div class="border border-ink rounded-xl overflow-hidden flex flex-col">${h('ACTIVO','up')}<table class="bal w-full flex-1"><tbody><tr class="font-semibold"><td colspan="3" class="pt-2">ACTIVO CORRIENTE</td></tr>${sec('DISPONIBLE',D)}${row(dis)}${sec('EXIGIBLES',E)}${row(exi)}${sec('REALIZABLE',R)}${row(rea)}<tr><td colspan="3" class="py-2"></td></tr><tr class="font-semibold"><td colspan="3">ACTIVO NO CORRIENTE</td></tr>${sec('PROPIEDADES, PLANTA Y EQUIPO',P)}${row(ppe)}${sec('OTROS ACTIVOS',O)}${row(otr)}</tbody></table>${tot('TOTAL ACTIVO',TA)}</div>
+<div class="border border-ink rounded-xl overflow-hidden flex flex-col">${h('PASIVO','receipt')}<table class="bal w-full flex-1"><tbody>${sec('PASIVO CORRIENTE',pc)}${row([['PROVEEDORES POR PAGAR',1500],['SUELDOS POR PAGAR',800]])}<tr><td colspan="3" class="py-2"></td></tr>${sec('PASIVO NO CORRIENTE',pnc)}${row([['PRÉSTAMOS BANCARIOS',12000]])}<tr><td colspan="3" class="py-4"></td></tr>${sec('PATRIMONIO',pat)}${row([['CAPITAL',pat-9650],['UTILIDADES ACUMULADAS',9650]])}</tbody></table>${tot('TOTAL PASIVO + PATRIMONIO',pc+pnc+pat)}</div></div></div></div>`}
+</script></body></html>
